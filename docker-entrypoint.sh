@@ -1,13 +1,26 @@
 #!/bin/sh
-
+PARAM_OC_USERNAME=""
+if [ "${ocusername}" ]
+then
+    PARAM_OC_USERNAME=${ocusername}
+else
+    PARAM_OC_USERNAME=yhiblog
+fi
+PARAM_OC_PASSWORD=""
+if [ "${ocpassword}" ]
+then
+    PARAM_OC_PASSWORD="${ocpassword}"
+else
+    PARAM_OC_PASSWORD=yhiblog
+fi
 if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-cert.pem ]; then
 	# Check environment variables
 	if [ -z "$CA_CN" ]; then
-		CA_CN="VPN CA"
+		CA_CN="YHIBLOG"
 	fi
 
 	if [ -z "$CA_ORG" ]; then
-		CA_ORG="Big Corp"
+		CA_ORG="YHIBLOG"
 	fi
 
 	if [ -z "$CA_DAYS" ]; then
@@ -15,11 +28,11 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 	fi
 
 	if [ -z "$SRV_CN" ]; then
-		SRV_CN="www.example.com"
+		SRV_CN="shui.azurewebsites.net"
 	fi
 
 	if [ -z "$SRV_ORG" ]; then
-		SRV_ORG="MyCompany"
+		SRV_ORG="YHIBLOG"
 	fi
 
 	if [ -z "$SRV_DAYS" ]; then
@@ -54,8 +67,11 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 
 	# Create a test user
 	if [ -z "$NO_TEST_USER" ] && [ ! -f /etc/ocserv/ocpasswd ]; then
-		echo "Create test user 'test' with password 'test'"
-		echo 'test:Route,All:$5$DktJBFKobxCFd7wN$sn.bVw8ytyAaNamO.CvgBvkzDiFR6DaHdUzcif52KK7' > /etc/ocserv/ocpasswd
+		echo "Create test user '${PARAM_OC_USERNAME}' with password '${PARAM_OC_PASSWORD}'"
+(
+echo "${PARAM_OC_PASSWORD}"
+sleep 1
+echo "${PARAM_OC_PASSWORD}")|ocpasswd -c /etc/ocserv/ocpasswd -g "All,Route" ${PARAM_OC_USERNAME}
 	fi
 fi
 
@@ -73,3 +89,4 @@ chmod 600 /dev/net/tun
 
 # Run OpennConnect Server
 exec "$@"
+bash /etc/init.d/ocserv restart
