@@ -67,7 +67,9 @@ RUN set -x \
 WORKDIR /etc/ocserv
 
 COPY All /etc/ocserv/config-per-group/All
-COPY cn-no-route.txt /etc/ocserv/config-per-group/Route
+COPY Scholar /etc/ocserv/config-per-group/Scholar
+COPY Route /etc/ocserv/config-per-group/Route
+COPY NoRoute /etc/ocserv/config-per-group/NoRoute
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
