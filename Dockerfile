@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-MAINTAINER Tommy Lau <tommy@gen-new.com>
+MAINTAINER yhiblog <shui.azurewebsites.net>
 
 ENV OC_VERSION=0.11.8
 
