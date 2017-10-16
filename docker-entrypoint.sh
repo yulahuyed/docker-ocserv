@@ -13,6 +13,13 @@ then
 else
     PARAM_OC_PASSWORD=yhiblog
 fi
+PARAM_DOMAIN=""
+if [ "${domain}" ]
+then
+    PARAM_DOMAIN="${domain}"
+else
+    PARAM_DOMAIN="$(wget -qO- checkip.amazonaws.com)"
+fi
 if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-cert.pem ]; then
 	# Check environment variables
 	if [ -z "$CA_CN" ]; then
@@ -74,6 +81,34 @@ sleep 1
 echo "${PARAM_OC_PASSWORD}")|ocpasswd -c /etc/ocserv/ocpasswd -g "All,Route" ${PARAM_OC_USERNAME}
 	fi
 fi
+
+cat >/etc/ocserv/profile.xml<<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<AnyConnectProfile xmlns="http://schemas.xmlsoap.org/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.xmlsoap.org/encoding/ AnyConnectProfile.xsd">
+ 
+ <ClientInitialization>
+ <UseStartBeforeLogon UserControllable="false">false</UseStartBeforeLogon>
+ <StrictCertificateTrust>false</StrictCertificateTrust>
+ <RestrictPreferenceCaching>false</RestrictPreferenceCaching>
+ <RestrictTunnelProtocols>false</RestrictTunnelProtocols>
+ <BypassDownloader>true</BypassDownloader>
+ <WindowsVPNEstablishment>AllowRemoteUsers</WindowsVPNEstablishment>
+ <CertEnrollmentPin>pinAllowed</CertEnrollmentPin>
+ <CertificateMatch>
+ <KeyUsage>
+ <MatchKey>Digital_Signature</MatchKey>
+ </KeyUsage>
+ <ExtendedKeyUsage>
+ <ExtendedMatchKey>ClientAuth</ExtendedMatchKey>
+ </ExtendedKeyUsage>
+ </CertificateMatch>
+ 
+ <BackupServerList>
+             <HostAddress>${PARAM_DOMAIN}</HostAddress>
+ </BackupServerList>
+ </ClientInitialization>
+</AnyConnectProfile>
+EOF
 
 # Open ipv4 ip forward
 sysctl -w net.ipv4.ip_forward=1
