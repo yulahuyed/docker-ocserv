@@ -1,4 +1,6 @@
-default-select-group = Route[仅海外代理 Exclude CN]
-select-group = All[全局代理 All Proxy]
+select-group = All
+select-group = Route
+select-group = NoRoute
+select-group = Scholar
 auto-select-group = false
 config-per-group = /etc/ocserv/config-per-group
