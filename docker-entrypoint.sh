@@ -78,7 +78,7 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 (
 echo "${PARAM_OC_PASSWORD}"
 sleep 1
-echo "${PARAM_OC_PASSWORD}")|ocpasswd -c /etc/ocserv/ocpasswd -g "All,Route" ${PARAM_OC_USERNAME}
+echo "${PARAM_OC_PASSWORD}")|ocpasswd -c /etc/ocserv/ocpasswd -g "All,Route,NoRoute,Scholar" ${PARAM_OC_USERNAME}
 	fi
 fi
 
@@ -109,6 +109,10 @@ cat >/etc/ocserv/profile.xml<<EOF
  </ClientInitialization>
 </AnyConnectProfile>
 EOF
+
+echo "no-route = $(wget -qO- checkip.amazonaws.com)/255.255.255.255" >> /etc/ocserv/group/All
+echo "no-route = $(wget -qO- checkip.amazonaws.com)/255.255.255.255" >> /etc/ocserv/group/NoRoute
+echo "no-route = $(wget -qO- checkip.amazonaws.com)/255.255.255.255" >> /etc/ocserv/group/Scholar
 
 # Open ipv4 ip forward
 sysctl -w net.ipv4.ip_forward=1
