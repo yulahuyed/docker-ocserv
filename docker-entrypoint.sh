@@ -110,9 +110,10 @@ cat >/etc/ocserv/profile.xml<<EOF
 </AnyConnectProfile>
 EOF
 
-echo "no-route = $(wget -qO- checkip.amazonaws.com)/255.255.255.255" >> /etc/ocserv/group/All
-echo "no-route = $(wget -qO- checkip.amazonaws.com)/255.255.255.255" >> /etc/ocserv/group/NoRoute
-echo "no-route = $(wget -qO- checkip.amazonaws.com)/255.255.255.255" >> /etc/ocserv/group/Scholar
+    PARAM_IP="$(wget -qO- checkip.amazonaws.com)"
+echo "no-route = ${PARAM_IP}/255.255.255.255" >> /etc/ocserv/group/All
+echo "no-route = ${PARAM_IP}/255.255.255.255" >> /etc/ocserv/group/NoRoute
+echo "no-route = ${PARAM_IP}/255.255.255.255" >> /etc/ocserv/group/Scholar
 
 # Open ipv4 ip forward
 sysctl -w net.ipv4.ip_forward=1
