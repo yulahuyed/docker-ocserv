@@ -4,3 +4,4 @@ select-group = NoRoute
 select-group = Scholar
 auto-select-group = false
 config-per-group = /etc/ocserv/config-per-group
+user-profile = /etc/ocserv/profile.xml
