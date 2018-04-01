@@ -4,6 +4,8 @@ MAINTAINER yhiblog <shui.azurewebsites.net>
 
 ENV OC_VERSION=0.11.8
 
+RUN apk update && apk add ca-certificates && update-ca-certificates
+
 RUN buildDeps=" \
 		curl \
 		g++ \
