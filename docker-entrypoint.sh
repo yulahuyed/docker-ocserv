@@ -18,7 +18,7 @@ if [ "${domain}" ]
 then
     PARAM_DOMAIN="${domain}"
 else
-    PARAM_DOMAIN="$(wget -qO- checkip.amazonaws.com)"
+    PARAM_DOMAIN="$(curl checkip.amazonaws.com 2>/dev/null)"
 fi
 if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-cert.pem ]; then
 	# Check environment variables
@@ -110,7 +110,7 @@ cat >/etc/ocserv/profile.xml<<EOF
 </AnyConnectProfile>
 EOF
 
-    PARAM_IP="$(wget -qO- checkip.amazonaws.com)"
+    PARAM_IP="$(curl checkip.amazonaws.com 2>/dev/null)"
 echo "no-route = ${PARAM_IP}/255.255.255.255" >> /etc/ocserv/config-per-group/All
 echo "no-route = ${PARAM_IP}/255.255.255.255" >> /etc/ocserv/config-per-group/NoRoute
 echo "no-route = ${PARAM_IP}/255.255.255.255" >> /etc/ocserv/config-per-group/Scholar
